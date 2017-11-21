@@ -1,12 +1,13 @@
 package de.thkoeln.undergroundcity;
 
+import android.support.annotation.ArrayRes;
+
 import java.util.ArrayList;
 
 class Bauebene {
 
     ArrayList<Bauwerk> bauwerkeArrayList = new ArrayList<>();
     int freieSlots;
-
 
     Bauebene(int freieSlots){
         this.freieSlots = freieSlots;
@@ -31,11 +32,11 @@ class Bauebene {
         }
     }
 
-    void zeichneSlots(){
+    String zeichneSlots(){
         StringBuilder ebene = new StringBuilder();
         for (Bauwerk b: bauwerkeArrayList)
             ebene.append(b.zeichnung());
-        return ebene;
+        return String.valueOf(ebene);
     }
 
     void zeichneInfo(){
@@ -72,5 +73,13 @@ class Bauebene {
 
     public void ausgabe(){
 
+    }
+
+    public ArrayList<Bauwerk> getBauwerke(){
+        return bauwerkeArrayList;
+    }
+
+    public int getBauwerkeAnzahl(){
+        return bauwerkeArrayList.size();
     }
 }

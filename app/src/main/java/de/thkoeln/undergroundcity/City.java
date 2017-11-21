@@ -49,4 +49,12 @@ public class City {
     public void bauePark(){
 
     }
+
+    public int getAnzahlEbenen(){
+        return bauebenenArrayList.size();
+    }
+
+    public ArrayList<Bauebene> getBauebenen(){
+        return bauebenenArrayList;
+    }
 }
