@@ -2,6 +2,10 @@ package de.thkoeln.undergroundcity;
 
 public class Infrastruktur extends Bauwerk {
 
+    public Infrastruktur(String type){
+        this.type = type;
+    }
+
     @Override
     public int getLebensqualitaet(){
         return 4;
@@ -15,6 +19,6 @@ public class Infrastruktur extends Bauwerk {
 
     @Override
     protected String getZeichnung(){
-        return type;
+        return zeichnung();
     }
 }

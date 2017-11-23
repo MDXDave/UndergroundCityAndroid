@@ -2,6 +2,7 @@ package de.thkoeln.undergroundcity;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
 
         Bauwerk bauwerk = buildingList.get(i);
 
-        buildingHolder.buildingTitle.setText(bauwerk.getZeichnung());
+        Log.i("BAUWERK", bauwerk.type);
+
+        buildingHolder.buildingTitle.setText(bauwerk.type);
     }
 
     @Override

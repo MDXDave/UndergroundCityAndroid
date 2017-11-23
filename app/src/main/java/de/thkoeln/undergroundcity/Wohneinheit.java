@@ -2,6 +2,10 @@ package de.thkoeln.undergroundcity;
 
 public class Wohneinheit extends Bauwerk {
 
+    public Wohneinheit(String type){
+        this.type = type;
+    }
+
     @Override
     public void spielrunde(int gesamteQualitaet){
         this.einnahmen = gesamteQualitaet * 10;
@@ -11,6 +15,6 @@ public class Wohneinheit extends Bauwerk {
 
     @Override
     protected String getZeichnung(){
-        return "W";
+        return zeichnung();
     }
 }

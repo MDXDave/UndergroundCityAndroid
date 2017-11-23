@@ -1,5 +1,7 @@
 package de.thkoeln.undergroundcity;
 
+import android.util.Log;
+
 abstract class Bauwerk {
 
     int slots;
@@ -33,7 +35,13 @@ abstract class Bauwerk {
     }
 
     public int getAusgaben(){
-        return kosten;
+        switch (this.type){
+            case "P": return 7500;
+            case "S": return 3500;
+            case "H": return 8000;
+            case "V": return 2500;
+            default: return 0;
+        }
     }
 
     public int getEinwohner(){
@@ -49,6 +57,7 @@ abstract class Bauwerk {
         for(int i= 0;i<slots;i++)
             slotZeichnung.append(this.getZeichnung());
 
+        Log.i("ZEICHNUNG", String.valueOf(slotZeichnung));
         return String.valueOf(slotZeichnung);
     }
 

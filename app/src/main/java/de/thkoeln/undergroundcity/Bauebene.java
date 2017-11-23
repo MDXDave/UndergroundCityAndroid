@@ -1,7 +1,5 @@
 package de.thkoeln.undergroundcity;
 
-import android.support.annotation.ArrayRes;
-
 import java.util.ArrayList;
 
 class Bauebene {
@@ -15,6 +13,7 @@ class Bauebene {
 
     public void bauwerkEinfuegen(Bauwerk b){
         bauwerkeArrayList.add(b);
+        freieSlots -= b.benoetigteSlots();
     }
 
     public int getFreieSlots(){

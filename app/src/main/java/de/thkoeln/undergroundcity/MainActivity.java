@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.zip.Inflater;
 
@@ -26,9 +28,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         startButton = findViewById(R.id.startButton);
         city = new City();
+        city.aktuellesGuthaben = 25000;
         layerAdaper = new LayerAdapter(this, city);
 
         initializeRecyclerView();
+        updateUi();
 
 
     }
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializeRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
+        recyclerView.setAdapter(layerAdaper);
     }
 
     @Override
@@ -56,11 +60,33 @@ public class MainActivity extends AppCompatActivity {
             case R.id.layer_large:
                 city.baueEbene(2850, 15); break;
             case R.id.building_high:
-                city.baueHochhaus(); break;
+                if(!city.baueHochhaus())
+                    Toast.makeText(this, "Zuwenig Slots!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.building_house:
+                if(!city.baueVilla())
+                    Toast.makeText(this, "Zuwenig Slots!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.building_park:
+                if(!city.bauePark())
+                    Toast.makeText(this, "Zuwenig Slots!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.building_supermarket:
+                if(!city.baueSupermarkt())
+                    Toast.makeText(this, "Zuwenig Slots!", Toast.LENGTH_LONG).show();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        layerAdaper.notifyDataSetChanged();
+
+        updateUi();
+
         return true;
+    }
+
+    private void updateUi() {
+
+        layerAdaper.notifyDataSetChanged();
+        getSupportActionBar().setSubtitle("Guthaben: "+city.aktuellesGuthaben+" € ");
     }
 }
