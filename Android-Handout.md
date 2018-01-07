@@ -140,4 +140,17 @@ Eine Activity wird beim Aufruf mittels _onCreate()_ erzeugt und durch _onStart()
 
 Sowohl im pausierten (_Paused_) als auch im gestoppten (_Stopped_) Zustand, kann die Activivy vom System zerstört werden (_Destroyed_). Dies wird vor Allem durchgeführt, wenn dem System zuwenig Ressourcen zur Verfügung stehen um aktuellere Aufgaben zu erledigen. Sofern die Activity aus dem _Stopped_-Zustand zerstört wird, wird die _onDestroy()_-Methode aufgerufen. Wird die App bzw. Activity nun erneut aufgerufen, wird diese komplett neu erzeugt. 
 
-Möchte man beispielsweise in einer Newsreader-App die Daten des Newsfeed bei jedem Aufruf der entsprechend Aktivität _NewsfeedActivity_ aktualisieren (auch wenn man einen Beitrag gelesen hat und nun mittels Zurück-Taste zum Newsfeed zurückkehrt), führt man die Aktion zum Aktualisieren des Newsfeeds in der _onResume()_-Methode der App aus.
+Möchte man beispielsweise in einer Newsreader-App die Daten des Newsfeed bei jedem Aufruf der entsprechend Aktivität _NewsfeedActivity_ aktualisieren (auch wenn man einen Beitrag gelesen hat und nun mittels Zurück-Taste zum Newsfeed zurückkehrt), führt man die Aktion zum Aktualisieren des Newsfeeds in der _onResume()_-Methode der App aus. Da _onResume()_ **immer** ausgeführt wird, sollten wir die Aktualisierung nicht zusätzlich in der _onCreate()_-Methode aufrufen. Zum Zeitpunkt des Aufrufs sollte das Layout bereits mittels _setContentView()_ gesetzt worden sein, sodass wir in der _onResume()_-Methode darauf zugreifen können. Dynamische Views, die innerhalb der Activity erzeugt werden, könnten jedoch je nach Zeitpunkt des Erstellens noch nicht vorhanden sein!
+
+```java
+protected void onResume() {
+    super.onResume();
+    refreshNewsfeed();
+}
+
+protected void onCreate(Bundle savedInstanceState){
+    super.onCreate(savedInstanceState);
+    setContentView(...);
+}
+
+```
