@@ -2,7 +2,7 @@ package de.thkoeln.undergroundcity;
 
 public class Wohneinheit extends Bauwerk {
 
-    public Wohneinheit(String type){
+    Wohneinheit(String type){
         this.type = type;
     }
 

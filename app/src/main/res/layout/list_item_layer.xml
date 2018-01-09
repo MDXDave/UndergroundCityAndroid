@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layerLayout"
     android:layout_width="match_parent"
-    android:layout_height="148dp"
+    android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
     android:orientation="vertical"
     android:padding="5dp">
@@ -29,9 +29,29 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/layerView"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inhabitants"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/income"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/costs"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/quality"/>
 
 
 </LinearLayout>

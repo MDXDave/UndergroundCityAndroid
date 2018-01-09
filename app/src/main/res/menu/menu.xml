@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/layers" android:title="Ebenen" android:icon="@drawable/ic_layers" android:iconTint="#fff" app:showAsAction="ifRoom">
+    <item android:id="@+id/layers" android:title="@string/layer" android:icon="@drawable/ic_layers" android:iconTint="#fff" app:showAsAction="ifRoom"
+        tools:targetApi="o">
         <menu >
-            <item android:title="Kleine Ebene" android:id="@+id/layer_small" />
-            <item android:title="Mittlere Ebene" android:id="@+id/layer_medium" />
-            <item android:title="Große Ebene" android:id="@+id/layer_large" />
+            <item android:title="@string/small_layer" android:id="@+id/layer_small" />
+            <item android:title="@string/medium_layer" android:id="@+id/layer_medium" />
+            <item android:title="@string/large_layer" android:id="@+id/layer_large" />
         </menu>
     </item>
-    <item android:id="@+id/buildings" android:title="Gebäude" android:icon="@drawable/ic_buildings" android:iconTint="#fff" app:showAsAction="ifRoom">
+    <item android:id="@+id/buildings" android:title="@string/buildings" android:icon="@drawable/ic_buildings" android:iconTint="#fff" app:showAsAction="ifRoom"
+        tools:targetApi="o">
     <menu >
-        <item android:title="Hochhaus" android:id="@+id/building_high" />
-        <item android:title="Villa" android:id="@+id/building_house" />
-        <item android:title="Park" android:id="@+id/building_park" />
-        <item android:title="Supermarkt" android:id="@+id/building_supermarket" />
+        <item android:title="@string/building_skyscraper" android:id="@+id/building_high" />
+        <item android:title="@string/building_house" android:id="@+id/building_house" />
+        <item android:title="@string/building_park" android:id="@+id/building_park" />
+        <item android:title="@string/building_supermarket" android:id="@+id/building_supermarket" />
     </menu>
     </item>
 

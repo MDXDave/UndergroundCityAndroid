@@ -4,8 +4,8 @@ import android.util.Log;
 
 abstract class Bauwerk {
 
-    int slots;
-    int alter;
+    private int slots;
+    private int alter;
     int kosten;
     int einnahmen;
     int einwohner;
@@ -20,7 +20,7 @@ abstract class Bauwerk {
         this.type = "W";
     }
 
-    public int benoetigteSlots(){
+    int benoetigteSlots(){
         switch (this.type){
             case "P": return 5;
             case "S": return 2;
@@ -30,11 +30,15 @@ abstract class Bauwerk {
         }
     }
 
-    public int getEinnahmen(){
-        return 0;
+    int getEinnahmen(){
+        switch (this.type){
+            case "P": return -2500;
+            default: return einnahmen;
+        }
+
     }
 
-    public int getAusgaben(){
+    int getAusgaben(){
         switch (this.type){
             case "P": return 7500;
             case "S": return 3500;
@@ -44,15 +48,21 @@ abstract class Bauwerk {
         }
     }
 
-    public int getEinwohner(){
-        return 0;
+    int getEinwohner(){
+        return einwohner;
     }
 
     public int getLebensqualitaet(){
-        return 0;
+        switch (this.type){
+            case "P": return 30;
+            case "S": return 10;
+            case "H": return -5;
+            case "V": return 0;
+            default: return 0;
+        }
     }
 
-    public String zeichnung(){
+    String zeichnung(){
         StringBuilder slotZeichnung = new StringBuilder();
         for(int i= 0;i<slots;i++)
             slotZeichnung.append(this.getZeichnung());
@@ -62,6 +72,20 @@ abstract class Bauwerk {
     }
 
     void spielrunde(int gesamteQualitaet){
+        switch (type){
+            case "S":
+                einnahmen = gesamteQualitaet * 100;
+                einwohner = gesamteQualitaet * 10;
+                break;
+            case "H":
+                einnahmen = gesamteQualitaet * -40;
+                einwohner = Math.max(0, gesamteQualitaet * -50);
+                break;
+            case "V":
+                einnahmen = gesamteQualitaet * 50;
+                einwohner = gesamteQualitaet * 20;
+                break;
+        }
         alter++;
     }
 

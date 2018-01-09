@@ -2,42 +2,36 @@ package de.thkoeln.undergroundcity;
 
 import java.util.ArrayList;
 
-public class City {
+class City {
 
-    ArrayList<Bauebene> bauebenenArrayList = new ArrayList<>();
-    int aktuelleEbene;
+    private ArrayList<Bauebene> bauebenenArrayList = new ArrayList<>();
+    int aktuelleEbene = -1;
     int aktuellesGuthaben;
+    int aktuelleSpielrunde = 0;
 
     City(){
 
     }
 
-    public void hoch(){
-
-    }
-
-    public void runter(){
-
-    }
-
-    public void spielrunden(int n){
+    void spielrunden(int n){
+        aktuelleSpielrunde = aktuelleSpielrunde+n;
         for(Bauebene bauebene: bauebenenArrayList){
-            for(int i=0; i<n; i++)
+            for(int i=0; i<n; i++) {
                 bauebene.spielrunde();
+                aktuellesGuthaben += bauebene.getEinnahmen();
+            }
         }
 
     }
 
-    public void ausgabe(){
-
-    }
-
-    public void baueEbene(int preis, int n){
+    void baueEbene(int preis, int n){
         bauebenenArrayList.add(new Bauebene(n));
         this.aktuellesGuthaben -= preis;
+        if(bauebenenArrayList.size() == 1)
+            aktuelleEbene = 0;
     }
 
-    public boolean baueHochhaus(){
+    boolean baueHochhaus(){
         return baueObjekt("H");
     }
 
@@ -51,27 +45,27 @@ public class City {
         return false;
     }
 
-    public boolean baueVilla(){
+    boolean baueVilla(){
         return baueObjekt("V");
     }
 
-    public boolean baueSupermarkt(){
+    boolean baueSupermarkt(){
         return baueObjekt("S");
     }
 
-    public boolean bauePark(){
+    boolean bauePark(){
         return baueObjekt("P");
     }
 
-    public boolean hatFreieSlots(int requiredSlots){
+    private boolean hatFreieSlots(int requiredSlots){
         return (bauebenenArrayList.get(aktuelleEbene).freieSlots >= requiredSlots);
     }
 
-    public int getAnzahlEbenen(){
+    int getAnzahlEbenen(){
         return bauebenenArrayList.size();
     }
 
-    public ArrayList<Bauebene> getBauebenen(){
+    ArrayList<Bauebene> getBauebenen(){
         return bauebenenArrayList;
     }
 }

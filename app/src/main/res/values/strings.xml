@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Underground City</string>
+    <string name="required_slots">%1$d Slots</string>
+    <string name="money">Guthaben: %1$d €</string>
+    <string name="round">Spielrunde %1$d</string>
+    <string name="inhabitants">Einwohner: %1$d</string>
+    <string name="income">Einkommen: %1$d €</string>
+    <string name="costs">Kosten: %1$d €</string>
+    <string name="quality">Lebensqualität: %1$d</string>
+    <string name="layer_free_slots">Ebene mit %1$d freien Slots</string>
+    <string name="layer">Ebenen</string>
+    <string name="small_layer">Kleine Ebene</string>
+    <string name="medium_layer">Mittlere Ebene</string>
+    <string name="large_layer">Große Ebene</string>
+    <string name="building_skyscraper">Hochhaus</string>
+    <string name="building_house">Villa</string>
+    <string name="building_park">Park</string>
+    <string name="building_supermarket">Supermarkt</string>
+    <string name="buildings">Gebäude</string>
 </resources>
