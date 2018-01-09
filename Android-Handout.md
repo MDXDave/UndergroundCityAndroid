@@ -5,7 +5,37 @@ Die wichtigsten Dateien für die Android-Entwicklung sind die build.gradle-Datei
 
 Ein Modul ist dabei eine Teilkomponente einer App. Eine App kann dabei aus lediglich einem Modul oder beliebig vielen Modulen bestehen. Ein Beispiel für eine App mit mehreren Modulen ist eine Anwendung die sowohl auf normalen Android-Geräten wie auch auf Smartwatches lauffähig ist. Eine Komponente app und eine andere Komponente _watch_. 
 
-Im Modulverzeichnis wird eine build.gradle-Datei wie im nachfolgenden Beispiel angelegt:
+Die Ordnerstruktur ist dabei standardmäßig folgendermaßen (stark vereinfacht):
+
+```
+-|
+ --| app
+    --| build.gradle
+    --| src
+       --| main
+          --| java
+             --| com
+                --| example
+                   --| app
+                      --| MainActivity.java
+          --| res
+             --| drawable
+                --| ic_launcher.png
+             --| layouts
+                --| MainActivity.xml
+             --| values
+               --| strings.xml
+ --| wear
+    --| build.gradle
+    --| src
+       --| main
+          ..| java
+          --| res
+ --| build.gradle
+ --| gradle.properties
+```
+
+Im Modulverzeichnis (``app/``) wird eine build.gradle-Datei wie im nachfolgenden Beispiel angelegt:
 ```gradle
 apply plugin: 'com.android.application'
 
@@ -131,8 +161,64 @@ startActivity(callIntent);
 
 Wichtig ist hierbei die Angabe welche Aktion mit dem Intent ausgeführt werden soll (im Beispiel entsprechend _ACTION_VIEW_  und _ACTION_CALL_). 
 
-### Aktivität 
-Im Gegensatz zu einem Windows-PC, verwaltet Android standardmäßig alle Prozesse selbst. Das Betriebssystem kann Anwendungen im Hintergrund automatisch schließen und wieder starten. Damit eine App auf derartige Ereignisse reagieren kann und beispielsweise einen Anzeigestatus nach einem Neustart wiederherstellen kann, müssen diese Lebenszyklen innerhalb einer Activity berücksichtig und implementiert werden. 
+### Layouts 
+Im vorherigen Abschnitt haben wir bereits die Verwendung eines Layouts (_setContentView()_) und ein XML-Layout kennengelernt. Ein XML-Layout darf immer nur aus **einer** Root-View bestehen. In dieser dürfen aber widerrum mehrere Views vorhanden sein. Jeder View **muss** eine Breite (_width_) und eine Höhe (_height_) zugewiesen werden. Diese kann neben einem festen Wert (der in DP angegeben werden sollte, DP = Density-independent Pixels),  entweder _match_parent_ oder _wrap_content_ sein. Ersteres _füllt_ die View bis zur Größe der übergeordneten View, letztes begrenzt die größe der View auf den aktuellen Inhalt.
+
+Die Größe einer View kann auch prozentual angeben werden. Hierfür wird der Wert für Breite oder Höhe auf _0dp_ und der Parameter _layout_weight_ auf einen beliebigen Wert (entsprechend angepasst an die Werte der anderen Views die ebenfalls prozentual angezeigt werden sollen) gesetzt.
+
+Eine der wichtigsten Container-Views ist das _LinearLayout_. In dieser können andere Views platziert werden, die sich _horizontal_ oder _vertikal_ anordnen. Hierfür muss der Parameter _orientation_ gesetzt werden (_horizontal_ oder _vertical_). Daneben existiert auch ein _FrameLayout_ (welches alle Views übereinander platziert), ein _RelativLayout_ (ermöglicht eine relative Positionierung aller Views zueinander) und ein [_ConstraintLayout_](https://developer.android.com/training/constraint-layout/index.html). Mit letzterem kann eine _responsive_ UI ermöglicht werden.  
+
+Alle Views können dabei die verschiedensten Parameter besitzen. Einige Views haben spezifische Parameter wie Textfarbe oder Textausrichtung. Parameter wie _Padding_, _Margin_ oder _Gravitiy_ (Ausrichtung) können aber für alle Views vergeben werden.
+
+Neben den Container-Views (oder auch Layouts) gibt es eine große Anzahl Interaktions-Views (auch Widgets genannt). Darunter befinden sich beispielsweise Buttons, Textfelder (_TextView_), Eingabefelder (_EditText_), Bilder (_ImageView_) und viele mehr. 
+
+Ein Layout, mit welchem es möglich ist eine E-Mail zu erstellen und zu senden, könnte beispielsweise folgendermaßen aussehen:
+
+ ![Beispiel-App](https://developer.android.com/images/ui/sample-linearlayout.png) 
+
+Als Root-View wird ein LinearLayout mit _16dp_ Abstand (_Padding_) links und rechts verwendet. Die Ausrichtung ist vertikal, alle untergeordneten Views werden _untereinander_ positioniert. Es folgen drei Eingabefelder (_EditText_), die sich in der Höhe alle an ihren eigenen Inhalt anpassen und die volle Breite des Elternviews (in diesem Fall des LinearLayouts besitzen). Der Parameter _hint_ verweist auf eine String-Ressource, die als Platzhalter-Text verwendet wird (im Beispiel _To_, _Subject_ und _Message_). Das Eingabefeld für die Nachricht wird darüber hinaus mit dem Parameter _layout_weight_ prozentual auf die gesamte Höhe des übergeordneten Layouts (abzüglich der anderen Views) gestreckt. Der Button zum Absenden der Nachricht wird auf _100dp_ Breite festgelegt und mit dem Parameter _gravitiy_ rechts ausgerichtet. Der Text _Send_ wird erneut aus einer String-Ressource bezogen.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical" >
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/to" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/subject" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="@string/message" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/send" />
+</LinearLayout>
+```
+Beispiel-Code und Bild von [Android Developers, Google Inc., linzenziert unter CC-BY-2.5](https://developer.android.com/guide/topics/ui/layout/linear.html)
+
+### Ressourcen
+
+Alle Inhalte die innerhalb der App verwendet werden, sind Ressourcen. Dazu zählen Texte, Bilder, Layouts, Farbcodes, Themes usw. Diese werden in Unterordnern des Verzeichnis ``app/src/main/res`` gespeichert. Im Ordner ``drawable`` (bzw. ``drawable-XXX``) werden Bitmaps (jpg, png oder gif-Dateien) oder XML-Drawables gespeichert. Eine vollständige Liste der verfügbaren Ressourcen, finden sich in der [Android Developers Dokumentation](https://developer.android.com/guide/topics/resources/drawable-resource.html).
+
+Im Ordner ``layout`` werden die Layouts für die App gespeichert, der ``menu``-Ordner enthält alle notwendigen Dateien für Menüs (unabhängig davon ob Overflow-, ActionBar-, oder NavDrawer-Menüs). Unter ``values`` werden Strings, Farbcodes oder Themes gespeichert. Zusätzlich kann eine App lokalisiert werden, indem an den ``values``-Ordner der zweistellige Länder-, bzw. Sprachcode angehangen wird. Möchten wir unsere App in deutsch und englisch anbieten, erstellen wir die englischen Texte im ``values``-Ordner. Die deutsche Übersetzung platzieren wir (in denselben Dateinamen) im Ordner ``values-de``. 
+
+Zusätzlich können wir auch bestimmte Ressourcen nur für einen mindest SDK-Level verwenden. Hierfür erstellen wir einen Ornder mit beispielsweise ``layout-v21``. Sofern ein Layout aufgerufen wird, welches auch in diesem Ordner exisiert, wird automatisch das Layout für das entsprechende SDK-Level des aktuellen Geräts ausgewählt. 
+
+### Acitivity-Lifecycle
+Im Gegensatz zu beispielsweise einem Windows-PC, verwaltet Android standardmäßig alle Prozesse selbst. Das Betriebssystem kann Anwendungen im Hintergrund automatisch schließen und wieder starten. Damit eine App auf derartige Ereignisse reagieren kann und beispielsweise einen Anzeigestatus nach einem Neustart wiederherstellen kann, müssen diese Lebenszyklen innerhalb einer Activity berücksichtig und implementiert werden. 
 
 ![Lifecycle](https://raw.githubusercontent.com/MDXDave/UndergroundCityAndroid/master/lifecycle.png?token=AF0UCLzoOmyjOYUSNrgUPS8-AaE44ENBks5aW7a0wA%3D%3D)
 
