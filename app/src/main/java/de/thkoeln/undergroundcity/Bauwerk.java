@@ -49,7 +49,7 @@ abstract class Bauwerk {
     }
 
     int getEinwohner(){
-        return einwohner;
+        return (einwohner<0) ? 0 : einwohner;
     }
 
     public int getLebensqualitaet(){
@@ -75,11 +75,11 @@ abstract class Bauwerk {
         switch (type){
             case "S":
                 einnahmen = gesamteQualitaet * 100;
-                einwohner = gesamteQualitaet * 10;
+                einwohner = 0;
                 break;
             case "H":
                 einnahmen = gesamteQualitaet * -40;
-                einwohner = Math.max(0, gesamteQualitaet * -50);
+                einwohner = gesamteQualitaet * -50;
                 break;
             case "V":
                 einnahmen = gesamteQualitaet * 50;
