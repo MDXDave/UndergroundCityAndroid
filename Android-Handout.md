@@ -1,6 +1,6 @@
 # Android Handout
 
-### Module & Gradle
+## Module & Gradle
 Die wichtigsten Dateien für die Android-Entwicklung sind die build.gradle-Dateien im Modulverzeichnis der Applikation.
 
 Ein Modul ist dabei eine Teilkomponente einer App. Eine App kann dabei aus lediglich einem Modul oder beliebig vielen Modulen bestehen. Ein Beispiel für eine App mit mehreren Modulen ist eine Anwendung die sowohl auf normalen Android-Geräten wie auch auf Smartwatches lauffähig ist. Eine Komponente app und eine andere Komponente _watch_. 
@@ -74,7 +74,7 @@ Mit dem Parameter _targetSdkVersion_ wird angegeben welche Features (welches SDK
 
 Im Abschnitt _dependencies_ werden verwendete Bibliotheken und Abhängigkeiten angegeben, die innerhalb des Moduls verwendet werden. Zunächst wird dabei die Package ID und dann den Namen und die Version der Bibliothek die verwendet werden soll angegeben.
 
-### Activities und Intents
+## Activities
 Eine Activity stellt einen Bildschirm dar.
 
 ```java
@@ -126,6 +126,33 @@ Innerhalb des linearen Layouts wird dann die TextView-Komponenten mit der Id hel
 </LinearLayout> 
 ```
 
+## Activity-Lifecycle
+Im Gegensatz zu beispielsweise einem Windows-PC, verwaltet Android standardmäßig alle Prozesse selbst. Das Betriebssystem kann Anwendungen im Hintergrund automatisch schließen und wieder starten. Damit eine App auf derartige Ereignisse reagieren kann und beispielsweise einen Anzeigestatus nach einem Neustart wiederherstellen kann, müssen diese Lebenszyklen innerhalb einer Activity berücksichtig und implementiert werden. 
+
+![Lifecycle](https://raw.githubusercontent.com/MDXDave/UndergroundCityAndroid/master/lifecycle.png?token=AF0UCLzoOmyjOYUSNrgUPS8-AaE44ENBks5aW7a0wA%3D%3D)
+
+Eine Activity wird beim Aufruf mittels _onCreate()_ erzeugt und durch _onStart()_ gestartet (Zustand _Started_). Durch den Aufruf von _onResume()_ befindet sich die Activity im Vordergrund und im Zustand _Running_. Wird eine **transparente** oder nicht-bildschirmfüllende Activity überlagert, wechselt die Activity in den Zustand _Paused_, beim wechsel wird hierbei die Methode _onPause()_ augerufen. Sofern eine **nicht-transparente** oder bildschirmfüllende Activity aufgerufen wird, wird die Activity in den Zustand _Stopped_ versetzt und die Methode _onStop()_ aufgerufen. Wird auf die Activity erneut zugegriffen, wird die Methode _onRestart()_ und _onStart()_ durchgeführt. Die Activity befindet sich nun wieder im Zustand _Started_.
+
+Sowohl im pausierten (_Paused_) als auch im gestoppten (_Stopped_) Zustand, kann die Activivy vom System zerstört werden (_Destroyed_). Dies wird vor Allem durchgeführt, wenn dem System zuwenig Ressourcen zur Verfügung stehen um aktuellere Aufgaben zu erledigen. Sofern die Activity aus dem _Stopped_-Zustand zerstört wird, wird die _onDestroy()_-Methode aufgerufen. Wird die App bzw. Activity nun erneut aufgerufen, wird diese komplett neu erzeugt. 
+
+Möchte man beispielsweise in einer Newsreader-App die Daten des Newsfeed bei jedem Aufruf der entsprechend Aktivität _NewsfeedActivity_ aktualisieren (auch wenn man einen Beitrag gelesen hat und nun mittels Zurück-Taste zum Newsfeed zurückkehrt), führt man die Aktion zum Aktualisieren des Newsfeeds in der _onResume()_-Methode der App aus. Da _onResume()_ **immer** ausgeführt wird, sollten wir die Aktualisierung nicht zusätzlich in der _onCreate()_-Methode aufrufen. Zum Zeitpunkt des Aufrufs sollte das Layout bereits mittels _setContentView()_ gesetzt worden sein, sodass wir in der _onResume()_-Methode darauf zugreifen können. Dynamische Views, die innerhalb der Activity erzeugt werden, könnten jedoch je nach Zeitpunkt des Erstellens noch nicht vorhanden sein!
+
+```java
+protected void onResume() {
+    super.onResume();
+    refreshNewsfeed();
+}
+
+protected void onCreate(Bundle savedInstanceState){
+    super.onCreate(savedInstanceState);
+    setContentView(...);
+}
+
+
+```
+
+
+## Intents
 ### Explizite Intents
 Wir könnten innerhalb dieser onClick-Methode beispielsweise auch eine andere Activity zusätzlich öffnen lassen. 
 
@@ -161,7 +188,7 @@ startActivity(callIntent);
 
 Wichtig ist hierbei die Angabe welche Aktion mit dem Intent ausgeführt werden soll (im Beispiel entsprechend _ACTION_VIEW_  und _ACTION_CALL_). 
 
-### Layouts 
+## Layouts 
 Im vorherigen Abschnitt haben wir bereits die Verwendung eines Layouts (_setContentView()_) und ein XML-Layout kennengelernt. Ein XML-Layout darf immer nur aus **einer** Root-View bestehen. In dieser dürfen aber widerrum mehrere Views vorhanden sein. Jeder View **muss** eine Breite (_width_) und eine Höhe (_height_) zugewiesen werden. Diese kann neben einem festen Wert (der in DP angegeben werden sollte, DP = Density-independent Pixels),  entweder _match_parent_ oder _wrap_content_ sein. Ersteres _füllt_ die View bis zur Größe der übergeordneten View, letztes begrenzt die größe der View auf den aktuellen Inhalt.
 
 Die Größe einer View kann auch prozentual angeben werden. Hierfür wird der Wert für Breite oder Höhe auf _0dp_ und der Parameter _layout_weight_ auf einen beliebigen Wert (entsprechend angepasst an die Werte der anderen Views die ebenfalls prozentual angezeigt werden sollen) gesetzt.
@@ -169,6 +196,8 @@ Die Größe einer View kann auch prozentual angeben werden. Hierfür wird der We
 Eine der wichtigsten Container-Views ist das _LinearLayout_. In dieser können andere Views platziert werden, die sich _horizontal_ oder _vertikal_ anordnen. Hierfür muss der Parameter _orientation_ gesetzt werden (_horizontal_ oder _vertical_). Daneben existiert auch ein _FrameLayout_ (welches alle Views übereinander platziert), ein _RelativLayout_ (ermöglicht eine relative Positionierung aller Views zueinander) und ein [_ConstraintLayout_](https://developer.android.com/training/constraint-layout/index.html). Mit letzterem kann eine _responsive_ UI ermöglicht werden.  
 
 Alle Views können dabei die verschiedensten Parameter besitzen. Einige Views haben spezifische Parameter wie Textfarbe oder Textausrichtung. Parameter wie _Padding_, _Margin_ oder _Gravitiy_ (Ausrichtung) können aber für alle Views vergeben werden.
+
+Eine Übersicht der möglichen Parameter einer EditText-View können in der [Android Dokumentation](https://developer.android.com/reference/android/widget/EditText.html) gefunden werden.
 
 Neben den Container-Views (oder auch Layouts) gibt es eine große Anzahl Interaktions-Views (auch Widgets genannt). Darunter befinden sich beispielsweise Buttons, Textfelder (_TextView_), Eingabefelder (_EditText_), Bilder (_ImageView_) und viele mehr. 
 
@@ -209,7 +238,7 @@ Als Root-View wird ein LinearLayout mit _16dp_ Abstand (_Padding_) links und rec
 ```
 Beispiel-Code und Bild von [Android Developers, Google Inc., linzenziert unter CC-BY-2.5](https://developer.android.com/guide/topics/ui/layout/linear.html)
 
-### Ressourcen
+## Ressourcen
 
 Alle Inhalte die innerhalb der App verwendet werden, sind Ressourcen. Dazu zählen Texte, Bilder, Layouts, Farbcodes, Themes usw. Diese werden in Unterordnern des Verzeichnis ``app/src/main/res`` gespeichert. Im Ordner ``drawable`` (bzw. ``drawable-XXX``) werden Bitmaps (jpg, png oder gif-Dateien) oder XML-Drawables gespeichert. Eine vollständige Liste der verfügbaren Ressourcen, finden sich in der [Android Developers Dokumentation](https://developer.android.com/guide/topics/resources/drawable-resource.html).
 
@@ -217,26 +246,3 @@ Im Ordner ``layout`` werden die Layouts für die App gespeichert, der ``menu``-O
 
 Zusätzlich können wir auch bestimmte Ressourcen nur für einen mindest SDK-Level verwenden. Hierfür erstellen wir einen Ornder mit beispielsweise ``layout-v21``. Sofern ein Layout aufgerufen wird, welches auch in diesem Ordner exisiert, wird automatisch das Layout für das entsprechende SDK-Level des aktuellen Geräts ausgewählt. 
 
-### Acitivity-Lifecycle
-Im Gegensatz zu beispielsweise einem Windows-PC, verwaltet Android standardmäßig alle Prozesse selbst. Das Betriebssystem kann Anwendungen im Hintergrund automatisch schließen und wieder starten. Damit eine App auf derartige Ereignisse reagieren kann und beispielsweise einen Anzeigestatus nach einem Neustart wiederherstellen kann, müssen diese Lebenszyklen innerhalb einer Activity berücksichtig und implementiert werden. 
-
-![Lifecycle](https://raw.githubusercontent.com/MDXDave/UndergroundCityAndroid/master/lifecycle.png?token=AF0UCLzoOmyjOYUSNrgUPS8-AaE44ENBks5aW7a0wA%3D%3D)
-
-Eine Activity wird beim Aufruf mittels _onCreate()_ erzeugt und durch _onStart()_ gestartet (Zustand _Started_). Durch den Aufruf von _onResume()_ befindet sich die Activity im Vordergrund und im Zustand _Running_. Wird eine **transparente** oder nicht-bildschirmfüllende Activity überlagert, wechselt die Activity in den Zustand _Paused_, beim wechsel wird hierbei die Methode _onPause()_ augerufen. Sofern eine **nicht-transparente** oder bildschirmfüllende Activity aufgerufen wird, wird die Activity in den Zustand _Stopped_ versetzt und die Methode _onStop()_ aufgerufen. Wird auf die Activity erneut zugegriffen, wird die Methode _onRestart()_ und _onStart()_ durchgeführt. Die Activity befindet sich nun wieder im Zustand _Started_.
-
-Sowohl im pausierten (_Paused_) als auch im gestoppten (_Stopped_) Zustand, kann die Activivy vom System zerstört werden (_Destroyed_). Dies wird vor Allem durchgeführt, wenn dem System zuwenig Ressourcen zur Verfügung stehen um aktuellere Aufgaben zu erledigen. Sofern die Activity aus dem _Stopped_-Zustand zerstört wird, wird die _onDestroy()_-Methode aufgerufen. Wird die App bzw. Activity nun erneut aufgerufen, wird diese komplett neu erzeugt. 
-
-Möchte man beispielsweise in einer Newsreader-App die Daten des Newsfeed bei jedem Aufruf der entsprechend Aktivität _NewsfeedActivity_ aktualisieren (auch wenn man einen Beitrag gelesen hat und nun mittels Zurück-Taste zum Newsfeed zurückkehrt), führt man die Aktion zum Aktualisieren des Newsfeeds in der _onResume()_-Methode der App aus. Da _onResume()_ **immer** ausgeführt wird, sollten wir die Aktualisierung nicht zusätzlich in der _onCreate()_-Methode aufrufen. Zum Zeitpunkt des Aufrufs sollte das Layout bereits mittels _setContentView()_ gesetzt worden sein, sodass wir in der _onResume()_-Methode darauf zugreifen können. Dynamische Views, die innerhalb der Activity erzeugt werden, könnten jedoch je nach Zeitpunkt des Erstellens noch nicht vorhanden sein!
-
-```java
-protected void onResume() {
-    super.onResume();
-    refreshNewsfeed();
-}
-
-protected void onCreate(Bundle savedInstanceState){
-    super.onCreate(savedInstanceState);
-    setContentView(...);
-}
-
-```
